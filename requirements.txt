@@ -3,5 +3,4 @@ ultralytics
 numpy
 requests
 fastapi
-os
 python-opencv

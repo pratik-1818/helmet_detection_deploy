@@ -1,21 +1,12 @@
 import os
+import requests
 import cv2
 import torch
 from ultralytics import YOLO
 import numpy as np
 
-# Get the current directory where this script is running
-current_dir = os.path.dirname(__file__)
-
-# Set the model path using a relative path
-model_path = os.path.join(current_dir, "best.pt")
-
-# Debugging: Print model path
-print(f"Loading YOLO model from: {model_path}")
-
 # Google Drive Direct Download Link for `best.pt`
 GOOGLE_DRIVE_LINK = "https://drive.google.com/uc?export=download&id=12XZTjBxaWkEwddcvaJMfLdsdXQsO4zoY"
-
 
 # Get the current directory where this script is running
 current_dir = os.path.dirname(__file__)
@@ -27,14 +18,17 @@ model_path = os.path.join(current_dir, "best.pt")
 if not os.path.exists(model_path):
     print(f"Downloading best.pt from {GOOGLE_DRIVE_LINK}...")
     
-    response = requests.get(GOOGLE_DRIVE_LINK)
+    response = requests.get(GOOGLE_DRIVE_LINK, stream=True)
     with open(model_path, "wb") as f:
-        f.write(response.content)
-    
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+
     print("Download complete!")
 
-# Load YOLOv8 model
-model = YOLO("/home/vmukti/Desktop/helmet_detection/best.pt")
+# ✅ Load YOLO model using the downloaded `best.pt`
+print(f"Loading YOLO model from: {model_path}")
+model = YOLO(model_path)
 
 # Define class names
 class_names = ["without helmet", "with helmet"]

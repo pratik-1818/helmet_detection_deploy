@@ -5,4 +5,4 @@ requests==2.31.0
 fastapi==0.110.0
 opencv-python==4.8.1.78
 uvicorn==0.29.0
-
+torch==2.2.1

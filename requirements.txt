@@ -1,6 +1,6 @@
-streamlit
-ultralytics
-numpy
-requests
-fastapi
-python-opencv
+streamlit==1.30.0
+ultralytics==8.1.0
+numpy==1.24.3
+requests==2.31.0
+fastapi==0.110.0
+opencv-python==4.8.1.78

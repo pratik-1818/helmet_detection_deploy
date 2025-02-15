@@ -1,12 +1,13 @@
 import os
-import requests
+import gdown
 import cv2
 import torch
 from ultralytics import YOLO
 import numpy as np
 
-# Google Drive Direct Download Link for `best.pt`
-GOOGLE_DRIVE_LINK = "https://drive.google.com/uc?export=download&id=12XZTjBxaWkEwddcvaJMfLdsdXQsO4zoY"
+# ✅ Correct Google Drive Direct Download Link
+GOOGLE_DRIVE_ID = "12XZTjBxaWkEwddcvaJMfLdsdXQsO4zoY"
+GOOGLE_DRIVE_LINK = f"https://drive.google.com/uc?export=download&id={GOOGLE_DRIVE_ID}"
 
 # Get the current directory where this script is running
 current_dir = os.path.dirname(__file__)
@@ -14,20 +15,20 @@ current_dir = os.path.dirname(__file__)
 # Define model path
 model_path = os.path.join(current_dir, "best.pt")
 
-# Check if the model already exists, if not, download it
+# ✅ Check if the model already exists, if not, download it
 if not os.path.exists(model_path):
-    print(f"Downloading best.pt from {GOOGLE_DRIVE_LINK}...")
+    print(f"📥 Downloading best.pt from {GOOGLE_DRIVE_LINK}...")
     
-    response = requests.get(GOOGLE_DRIVE_LINK, stream=True)
-    with open(model_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
-
-    print("Download complete!")
+    gdown.download(GOOGLE_DRIVE_LINK, model_path, quiet=False)
+    
+    if os.path.exists(model_path):
+        print("✅ Download complete!")
+    else:
+        print("❌ Error: Model download failed!")
+        exit(1)  # Stop the script if the model is not downloaded
 
 # ✅ Load YOLO model using the downloaded `best.pt`
-print(f"Loading YOLO model from: {model_path}")
+print(f"🚀 Loading YOLO model from: {model_path}")
 model = YOLO(model_path)
 
 # Define class names
